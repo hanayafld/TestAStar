@@ -17,7 +17,7 @@ public class Tile : MonoBehaviour
     public int g;
     public int h;
 
-    public Vector2 pos;
+    public Vector3 pos;
 
     void Start()
     {

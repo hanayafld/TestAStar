@@ -9,11 +9,17 @@ public class TestAStar : MonoBehaviour
     public Tile[] Tiles;
     public Button btn;
 
+    private GameObject arrowGo;
     private Tile[,] arrTiles = new Tile[5, 7];
     private Tile startTile;
 
     private List<Tile> openList = new List<Tile>();
     private List<Tile> closeList = new List<Tile>();
+
+    void Awake()
+    {
+        this.arrowGo = Resources.Load<GameObject>("Arrow");
+    }
 
     void Start()
     {
@@ -54,14 +60,25 @@ public class TestAStar : MonoBehaviour
                     else if(arrTiles[newX,newY].tileType!=1)
                     {
                         this.openList.Add(this.arrTiles[newX, newY]);
-                        foreach (var data in openList)
-                        {
-                            data.imageGo.GetComponent<SpriteRenderer>().color = Color.yellow;
-                        }
+
+                        var arrow = Instantiate<GameObject>(this.arrowGo);
+                        arrow.transform.SetParent(this.arrTiles[newX, newY].transform);
+                        arrow.transform.position = this.arrTiles[newX, newY].transform.position;
+                        //arrow.transform.LookAt(pos);
+
+
+                        Vector3 diff = (this.startTile.transform.position - this.arrTiles[newX, newY].transform.position).normalized;
+
+                        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+                        transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
                     }
                 }
             }
-
+            foreach (var data in openList)
+            {
+                data.imageGo.GetComponent<SpriteRenderer>().color = Color.yellow;
+                
+            }
         });
     }
 }
